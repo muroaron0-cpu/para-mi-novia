@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para mi niña hermosa</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+        background-color: #1a1a1a;
+        font-family: 'Poppins', sans-serif;
+        overflow-x: hidden;
+    }
+
+    /* --- INTRO CON QUIZ --- */
+    #intro-screen {
+        position: fixed;
+        width: 100%;
+        height: 100vh;
+        z-index: 1000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: url('perfil.png') no-repeat center center;
+        background-size: cover;
+    }
+
+    #intro-screen::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(20px); /* El fondo muy borroso como pediste */
+    }
+
+    .quiz-container {
+        position: relative;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 30px;
+        border-radius: 20px;
+        text-align: center;
+        max-width: 320px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        border: 3px solid #f8b500;
+    }
+
+    .quiz-container h2 {
+        font-family: 'Dancing Script', cursive;
+        color: #d35400;
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .quiz-btn {
+        background: #f8b500;
+        border: none;
+        padding: 10px 30px;
+        border-radius: 50px;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .quiz-btn:hover { transform: scale(1.1); background: #d35400; }
+
+    /* --- CARTA PRINCIPAL --- */
+    #main-content {
+        display: none;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #fceabb 0%, #f8b500 100%);
+        padding: 40px 20px;
+        position: relative;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .letter-card {
+        background: #fffafa;
+        max-width: 500px;
+        padding: 40px 25px;
+        border-radius: 15px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        border: 2px solid #2e7d32;
+        position: relative;
+        z-index: 5;
+    }
+
+    .letter-card h1 {
+        font-family: 'Dancing Script', cursive;
+        color: #d35400;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .letter-card p {
+        color: #333;
+        line-height: 1.6;
+        font-size: 15px;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    /* --- RELOJ --- */
+    .timer-box {
+        background: #fff;
+        padding: 15px;
+        border-radius: 15px;
+        display: flex;
+        justify-content: space-around;
+        margin-top: 20px;
+        border: 2px dashed #f8b500;
+    }
+
+    .timer-item { text-align: center; }
+    .timer-item span { display: block; font-weight: bold; color: #d35400; font-size: 20px; }
+    .timer-item label { font-size: 10px; color: #666; text-transform: uppercase; }
+
+    /* --- DECORACIONES --- */
+    .flower { position: absolute; font-size: 30px; animation: float 4s infinite ease-in-out; z-index: 1; }
+    @keyframes float { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-20px) rotate(20deg); } }
+
+    .heart-rain {
+        position: fixed;
+        color: rgba(211, 84, 0, 0.3);
+        font-size: 20px;
+        animation: fall 5s linear infinite;
+        z-index: 0;
+    }
+
+    @keyframes fall {
+        to { transform: translateY(110vh); }
+    }
+</style>
+</head>
+<body>
+
+<div id="intro-screen">
+    <div class="quiz-container">
+        <h2 id="question">¿Lista para tu sorpresa?</h2>
+        <button class="quiz-btn" id="btn-next" onclick="nextStep()">Sí, mi amor ❤️</button>
+    </div>
+</div>
+
+<div id="main-content">
+    <div class="letter-card">
+        <h1>Feliz 21, Mi Amor</h1>
+        <p>Te amo mi amor, en serio eres la mejor persona del mundo aunque no lo creas. Aunque te cueste admitir lo grandiosa que eres, ante mis ojos eres la chica perfecta.</p>
+        <p>Te amo, sigue siendo la mejor novia. Quiero que sepas desde lo más profundo de mi corazón que eres la chica más linda, espectacular y brillante que conocí.</p>
+        <p>Gracias a ti mejoré en todo, como novio y como persona. Aprendí a amar y a que no importa por lo que pasemos o si todo el mundo está contra nosotros, siempre sabemos superarlo. Somos los mejores novios, tú y yo.</p>
+        <p>No hay nadie que nos pare, nuestro amor es tan grande que seguimos adelante. Te amo por lo que eres, por lo que me haces sentir y por lo guerrera que eres.</p>
+        <p>Te adoraré tanto que te seguiré hasta que seamos viejitos y tengamos esos 4 hijos y 2 perros. Siempre serás mi consentida, mi niña hermosa.</p>
+        <p>Espero que la siguiente carta por el 21 del próximo año sea todavía más bonita.</p>
+
+        <div class="timer-box">
+            <div class="timer-item"><span id="days">0</span><label>Días</label></div>
+            <div class="timer-item"><span id="hours">0</span><label>Hrs</label></div>
+            <div class="timer-item"><span id="mins">0</span><label>Min</label></div>
+            <div class="timer-item"><span id="secs">0</span><label>Seg</label></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let step = 0;
+    const questions = [
+        "¿Quién es la chica más linda del mundo?",
+        "¿Quién es la mejor novia?",
+        "¿Quién es el mejor novio?"
+    ];
+    const btnText = ["Tú", "Yo", "Yo"];
+
+    function nextStep() {
+        if (step < questions.length) {
+            document.getElementById('question').innerText = questions[step];
+            document.getElementById('btn-next').innerText = btnText[step];
+            step++;
+        } else {
+            document.getElementById('intro-screen').style.display = 'none';
+            document.getElementById('main-content').style.display = 'flex';
+            startTimer();
+            createDecorations();
+        }
+    }
+
+    function startTimer() {
+        // Base: 340 días atrás desde ahora
+        const startDate = new Date();
+        startDate.setDate(startDate.getDate() - 340);
+
+        setInterval(() => {
+            const now = new Date();
+            const diff = now - startDate;
+
+            document.getElementById('days').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+            document.getElementById('hours').innerText = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            document.getElementById('mins').innerText = Math.floor((diff / 1000 / 60) % 60);
+            document.getElementById('secs').innerText = Math.floor((diff / 1000) % 60);
+        }, 1000);
+    }
+
+    function createDecorations() {
+        const icons = ['🌻', '🍀', '🌼', '🌿', '🧡'];
+        for (let i = 0; i < 20; i++) {
+            let item = document.createElement('div');
+            item.className = 'flower';
+            item.innerText = icons[Math.floor(Math.random() * icons.length)];
+            item.style.left = Math.random() * 90 + 'vw';
+            item.style.top = Math.random() * 90 + 'vh';
+            item.style.animationDelay = Math.random() * 5 + 's';
+            document.getElementById('main-content').appendChild(item);
+        }
+    }
+</script>
+</body>
+</html>
