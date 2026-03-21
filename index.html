@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feliz 21, Mi Amor</title>
+<style>
+    /* Importamos fuentes elegantes y modernas */
+    @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Lato:wght@300;400&family=Orbitron&display=swap');
+
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Lato', sans-serif;
+        overflow: hidden; /* Evita scrolls durante la intro */
+        background-color: #f8b500; /* Fondo base cálido */
+    }
+
+    /* --- PANTALLA DE INTRODUCCIÓN INTERACTIVA (FONDO BORROSO CON IMAGEN) --- */
+    #background-blur {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url(image_7.png) no-repeat center center fixed;
+        background-size: cover;
+        /* Blur fuerte pero que deja ver las formas y colores */
+        filter: blur(15px) brightness(0.8);
+        -webkit-filter: blur(15px) brightness(0.8);
+        -moz-filter: blur(15px) brightness(0.8);
+        z-index: 100;
+        transition: opacity 1.5s ease;
+    }
+
+    #intro-panel {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.4); /* Capa oscura semi-transparente */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 101;
+        transition: opacity 1s ease, visibility 1s ease;
+    }
+
+    #intro-panel.hidden, #background-blur.hidden {
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    #quiz-card {
+        background-color: #fffaf0; /* Color crema parchment */
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        text-align: center;
+        width: 90%;
+        max-width: 450px;
+        position: relative;
+        border: 2px solid #f9d423; /* Borde naranja/amarillo */
+    }
+
+    #quiz-card::before {
+        content: '🧡🌻🍀';
+        font-size: 2em;
+        position: absolute;
+        top: -30px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #f8b500;
+        padding: 5px 15px;
+        border-radius: 20px;
+        color: white;
+    }
+
+    #question-text {
+        font-family: 'Dancing Script', cursive;
+        color: #d35400; /* Orange-brown title color */
+        font-size: 2.2em;
+        margin-bottom: 25px;
+    }
+
+    .answer-btn {
+        font-family: 'Lato', sans-serif;
+        font-weight: bold;
+        background-color: #d35400; /* Botón naranja oscuro */
+        color: white;
+        font-size: 1.2em;
+        padding: 12px 25px;
+        border-radius: 30px;
+        border: none;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        cursor: pointer;
+        transition: transform 0.2s ease, background-color 0.2s ease;
+        display: none; /* Se activará con JS */
+    }
+
+    .answer-btn:active {
+        transform: scale(0.95);
+        background-color: #a04000;
+    }
+
+    /* --- CONTENEDOR PRINCIPAL DE LA CARTA (FONDO LINDO Y ACCESORIOS) --- */
+    #main-container {
+        display: none; /* Se mostrará con JavaScript */
+        position: relative;
+        z-index: 10;
+        min-height: 100vh;
+        width: 100%;
+        overflow-y: auto; /* Permite scroll si la carta es larga */
+        padding: 50px 20px;
+        background: radial-gradient(circle, #fceabb 0%, #f8b500 100%); /* Fondo degradado suave */
+    }
+
+    #main-container.visible {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        animation: fadeInContainer 2s ease forwards;
+    }
+
+    @keyframes fadeInContainer {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Decoración de ambiente rico */
+    .deco-item {
+        position: absolute;
+        pointer-events: none;
+        z-index: 5;
+    }
+
+    /* Rosas Amarillas scattered petals */
+    .petal {
+        position: absolute;
+        font-size: 1.5em;
+        color: rgba(255, 230, 0, 0.7);
+        animation: fallPetal 6s infinite linear;
+    }
+
+    @keyframes fallPetal {
+        0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+        100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+
+    /* Scattered foliage */
+    .foliage {
+        font-size: 2.5em;
+        color: #2e7d32;
+        filter: drop-shadow(0px 2px 3px rgba(0,0,0,0.2));
+    }
+
+    /* Ramo de Rosas Amarillas Animado */
+    .bouquet-container {
+        font-size: 90px;
+        margin-bottom: -35px;
+        animation: float 3s ease-in-out infinite, sway 4s ease-in-out infinite;
+        display: inline-block;
+        filter: drop-shadow(0px 10px 10px rgba(0,0,0,0.2));
+        position: relative;
+        z-index: 11;
+    }
+
+    /* Estilo de la Carta Mejorada */
+    .letter {
+        background: #fffafa; /* Parchment cream */
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 60px 50px 50px 50px;
+        border-radius: 20px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        position: relative;
+        border: 2px solid #f9d423; /* Border orange/yellow */
+    }
+
+    .letter::before {
+        content: '🌻🌿🧡';
+        font-size: 2.5em;
+        position: absolute;
+        top: -35px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #f8b500;
+        padding: 5px 20px;
+        border-radius: 20px;
+        color: white;
+        z-index: 12;
+    }
+
+    h1 {
+        font-family: 'Dancing Script', cursive;
+        color: #d35400; /* Brownish Orange color for title */
+        font-size: 2.8em;
+        margin-bottom: 20px;
+    }
+
+    p {
+        font-size: 1.25em;
+        color: #333;
+        line-height: 1.7;
+        text-align: justify;
+        margin-bottom: 25px;
+        /* Corregimos text-align: left para un mejor flujo visual */
+    }
+
+    /* Estilo del Nuevo Contador Mejorado (Reloj Real: Días, Horas, Min, Sec) */
+    .clock-container {
+        font-family: 'Orbitron', sans-serif; /* Fuente digital/moderna */
+        color: #e67e22; /* Orange color */
+        margin-top: 35px;
+        background: #fdf5e6;
+        padding: 20px 30px;
+        border-radius: 30px;
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        border: 1px dashed #e67e22;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .clock-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .clock-value {
+        font-size: 2.2em;
+        font-weight: bold;
+    }
+
+    .clock-label {
+        font-family: 'Lato', sans-serif;
+        font-size: 0.6em;
+        text-transform: uppercase;
+        margin-top: -5px;
+        color: #a04000;
+    }
+
+    /* Keyframes para el movimiento */
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-15px); }
+    }
+
+    @keyframes sway {
+        0%, 100% { transform: rotate(-5deg); }
+        50% { transform: rotate(5deg); }
+    }
+
+    /* Corazones amarillos flotando de fondo */
+    .heart {
+        position: absolute;
+        color: rgba(255, 230, 0, 0.7); /* Corazones amarillos suaves */
+        font-size: 28px;
+        animation: riseHeart 5s infinite ease-in;
+    }
+
+    @keyframes riseHeart {
+        0% { bottom: -10%; transform: translateX(0); opacity: 0; }
+        50% { opacity: 1; }
+        100% { bottom: 110%; transform: translateX(-20px); opacity: 0; }
+    }
+
+</style>
+</head>
+<body>
+
+<div id="background-blur"></div>
+<div id="intro-panel">
+    <div id="quiz-card">
+        <div id="question-text">¿Estás lista? Toca aquí para ver tu regalo...</div>
+        <button class="answer-btn" id="q1-btn">Empezar Quiz 🧡</button>
+        <button class="answer-btn" id="q2-btn">Tú</button>
+        <button class="answer-btn" id="q3-btn">Yo</button>
+        <button class="answer-btn" id="q4-btn">Yo</button>
+    </div>
+</div>
+
+<div id="main-container">
+
+    <div class="deco-item foliage" style="top: 10%; left: 5%;">🌿</div>
+    <div class="deco-item foliage" style="top: 70%; right: 10%;">🌿</div>
+    <div class="deco-item foliage" style="top: 25%; right: 5%;">🍃</div>
+    <div class="deco-item foliage" style="top: 85%; left: 15%;">🍃</div>
+
+    <div id="petals-container"></div>
+
+    <div class="bouquet-container">
+        💛💐🌻💛
+    </div>
+
+    <div class="letter">
+        <h1>Feliz 21, Mi Amor</h1>
+        <p>
+            Te amo mi amor. En serio eres la mejor persona del mundo, aunque no lo creas, aunque te cueste admitir lo grandiosa que eres, ante mis ojos eres la chica perfecta.
+        </p>
+        <p>
+            Te amo, sigue siendo la mejor novia del mundo, amor. Quiero que sepas desde lo más profundo de mi corazón que eres la chica más linda, espectacular y brillante que conocí. También, que gracias a ti mejoré en todo, como novio, como persona.
+        </p>
+        <p>
+            Gracias a ti aprendí a amar, a que no importa por lo que pasemos o que todo el mundo esté contra nosotros, siempre sabemos superarlo. Somos los mejores novios, tú y yo. No hay nadie que nos pare, no importa por cuánto pasemos, nuestro amor es tan grande que seguimos adelante.
+        </p>
+        <p>
+            Te amo por lo que eres, te amo por lo que me haces sentir, te amo por lo mucho que superas las cosas, te amo por todo. Te amo por lo mucho que te esfuerzas, por lo guerrera que eres. Yo te amo, te adoro tanto que te seguiré a todas partes, hasta que sea viejito y tengamos 4 hijos y 2 perros. Además, siempre serás mi consentida, mi niña hermosa.
+        </p>
+        <p>
+            Espero que la siguiente carta por el 21 del siguiente año sea más bonita.
+        </p>
+
+        <div class="clock-container">
+            <div class="clock-item">
+                <span class="clock-value" id="daysClock">340</span>
+                <span class="clock-label">Días</span>
+            </div>
+            <div class="clock-item">
+                <span class="clock-value" id="hoursClock">00</span>
+                <span class="clock-label">Horas</span>
+            </div>
+            <div class="clock-item">
+                <span class="clock-value" id="minutesClock">00</span>
+                <span class="clock-label">Min</span>
+            </div>
+            <div class="clock-item">
+                <span class="clock-value" id="secondsClock">00</span>
+                <span class="clock-label">Seg</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- Referencias a elementos HTML ---
+    const introPanel = document.getElementById('intro-panel');
+    const backgroundBlur = document.getElementById('background-blur');
+    const mainContainer = document.getElementById('main-container');
+    const questionText = document.getElementById('question-text');
+    const q1Btn = document.getElementById('q1-btn');
+    const q2Btn = document.getElementById('q2-btn');
+    const q3Btn = document.getElementById('q3-btn');
+    const q4Btn = document.getElementById('q4-btn');
+    const clockElements = {
+        days: document.getElementById('daysClock'),
+        hours: document.getElementById('hoursClock'),
+        minutes: document.getElementById('minutesClock'),
+        seconds: document.getElementById('secondsClock')
+    };
+
+    // --- Lógica del Quiz de la Introducción Interactiva ---
+    // Muestra el primer botón
+    q1Btn.style.display = 'inline-block';
+
+    // Función para pasar a la siguiente pregunta
+    function nextQuestion(nextQText, currentBtn, nextBtn) {
+        currentBtn.style.display = 'none'; // Oculta el botón actual
+        questionText.textContent = nextQText; // Cambia el texto de la pregunta
+        if (nextBtn) nextBtn.style.display = 'inline-block'; // Muestra el siguiente botón
+    }
+
+    // Event Listeners para el Quiz
+    q1Btn.addEventListener('click', () => {
+        nextQuestion('¿Quién es la chica más linda del mundo?', q1Btn, q2Btn);
+    });
+
+    q2Btn.addEventListener('click', () => {
+        nextQuestion('¿Quién es la mejor novia?', q2Btn, q3Btn);
+    });
+
+    q3Btn.addEventListener('click', () => {
+        nextQuestion('¿Quién es el mejor novio?', q3Btn, q4Btn);
+    });
+
+    q4Btn.addEventListener('click', () => {
+        // Al responder la última pregunta, iniciamos la transición a la carta
+        transitionToLetter();
+    });
+
+
+    // --- Lógica de Transición a la Carta Principal ---
+    function transitionToLetter() {
+        introPanel.classList.add('hidden'); // Oculta la pantalla de intro con animación CSS
+        backgroundBlur.classList.add('hidden'); // Oculta el fondo borroso
+        setTimeout(() => {
+            mainContainer.classList.add('visible'); // Muestra el contenedor de la carta
+            // Inicia el reloj, corazones flotantes y lluvia de pétalos
+            startLiveClock();
+            startHeartsInterval();
+            startPetalsRain();
+        }, 1500); // Pequeño retraso después de ocultar la intro
+    }
+
+
+    // --- Lógica del Nuevo Contador Mejorado (Reloj en Tiempo Real) ---
+    // Definimos la fecha de inicio. Usamos la fecha actual de apertura menos 340 días como punto de partida.
+    // Esto asegura que el contador empiece en 340 días exactos y suba a partir de ahí en tiempo real.
+    const startOffsetMs = 340 * 24 * 60 * 60 * 1000; // 340 días en milisegundos
+    const calculatedStartDate = new Date(new Date().getTime() - startOffsetMs);
+
+    function startLiveClock() {
+        // Ejecuta la función por primera vez y luego cada segundo
+        updateClock();
+        setInterval(updateClock, 1000); // 1000 milisegundos = 1 segundo
+    }
+
+    function updateClock() {
+        const now = new Date();
+        const diffMs = now - calculatedStartDate; // Diferencia en milisegundos
+
+        // Calculamos días, horas, minutos, segundos
+        let totalSeconds = Math.floor(diffMs / 1000);
+        const days = Math.floor(totalSeconds / 86400); // 86400 segundos en un día
+        totalSeconds %= 86400; // Segundos restantes para horas/minutos/segundos
+
+        const hours = Math.floor(totalSeconds / 3600); // 3600 segundos en una hora
+        totalSeconds %= 3600; // Segundos restantes para minutos/segundos
+
+        const minutes = Math.floor(totalSeconds / 60);
+        totalSeconds %= 60; // Segundos restantes para segundos
+
+        const seconds = totalSeconds;
+
+        // Actualizamos los elementos HTML, añadiendo ceros a la izquierda si es necesario
+        clockElements.days.textContent = days;
+        clockElements.hours.textContent = String(hours).padStart(2, '0');
+        clockElements.minutes.textContent = String(minutes).padStart(2, '0');
+        clockElements.seconds.textContent = String(seconds).padStart(2, '0');
+    }
+
+
+    // --- Efectos de Ambiente Rico: Corazones y Lluvia de Pétalos ---
+    function startHeartsInterval() {
+        // Crear un nuevo corazón amarillo flotante cada 500 milisegundos
+        setInterval(createHeart, 500);
+    }
+
+    function createHeart() {
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        heart.innerHTML = '💛'; // Corazón amarillo
+        heart.style.left = Math.random() * 100 + 'vw';
+        // Velocidad aleatoria para cada corazón
+        heart.style.animationDuration = Math.random() * 2 + 3 + 's';
+        
+        document.body.appendChild(heart);
+        
+        // Eliminar el corazón de la memoria cuando sale de la pantalla
+        setTimeout(() => {
+            heart.remove();
+        }, 5000);
+    }
+
+    function startPetalsRain() {
+        // Crear un nuevo pétalo scattered cada 700 milisegundos
+        setInterval(createPetal, 700);
+    }
+
+    function createPetal() {
+        const petal = document.createElement('div');
+        petal.classList.add('deco-item', 'petal');
+        petal.innerHTML = '✨'; // Usamos brillo para pétalos
+        petal.style.left = Math.random() * 100 + 'vw';
+        // Velocidad aleatoria para cada pétalo
+        petal.style.animationDuration = Math.random() * 2 + 5 + 's';
+        
+        document.getElementById('petals-container').appendChild(petal);
+        
+        // Eliminar el pétalo de la memoria cuando sale de la pantalla
+        setTimeout(() => {
+            petal.remove();
+        }, 6000);
+    }
+
+</script>
+</body>
+</html>
