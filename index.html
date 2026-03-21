@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feliz 21, Mi Amor</title>
+<style>
+    /* Importamos fuentes elegantes */
+    @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Lato:wght@300;400&family=Orbitron&display=swap');
+
+    body {
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, #fceabb 0%, #f8b500 100%);
+        font-family: 'Lato', sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        overflow: hidden;
+    }
+
+    /* Estilos para la pantalla de introducción interactiva */
+    #intro-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #f8b500;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 200;
+        cursor: pointer;
+        transition: opacity 1s ease, visibility 1s ease;
+    }
+
+    #intro-screen.hidden {
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    #intro-text {
+        font-family: 'Dancing Script', cursive;
+        color: white;
+        font-size: 3em;
+        margin-bottom: 20px;
+        animation: pulse 2s infinite;
+    }
+
+    #intro-button {
+        font-family: 'Dancing Script', cursive;
+        background-color: #d35400;
+        color: white;
+        font-size: 1.5em;
+        padding: 15px 30px;
+        border-radius: 50px;
+        border: none;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        cursor: pointer;
+        transition: transform 0.2s ease;
+    }
+
+    #intro-button:active {
+        transform: scale(0.95);
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.05); opacity: 0.8; }
+    }
+
+    /* Contenedor principal de la carta (oculto al principio) */
+    .container {
+        text-align: center;
+        position: relative;
+        z-index: 10;
+        padding: 20px;
+        display: none; /* Se mostrará con JavaScript */
+    }
+
+    /* Animación para que la carta aparezca suavemente */
+    @keyframes fadeInContainer {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Ramo de Rosas Amarillas Animado */
+    .bouquet {
+        font-size: 80px;
+        margin-bottom: -25px;
+        animation: float 3s ease-in-out infinite, sway 4s ease-in-out infinite;
+        display: inline-block;
+        filter: drop-shadow(0px 10px 10px rgba(0,0,0,0.2));
+        position: relative;
+        z-index: 11;
+    }
+
+    /* Estilo de la Carta */
+    .letter {
+        background: #fffafa;
+        width: 100%;
+        max-width: 550px;
+        margin: 0 auto;
+        padding: 50px 40px 40px 40px;
+        border-radius: 15px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        position: relative;
+        border: 2px solid #f9d423;
+    }
+
+    h1 {
+        font-family: 'Dancing Script', cursive;
+        color: #d35400;
+        font-size: 2.5em;
+        margin-bottom: 15px;
+    }
+
+    p {
+        font-size: 1.15em;
+        color: #333;
+        line-height: 1.6;
+        text-align: justify;
+        margin-bottom: 20px;
+    }
+
+    /* Estilo del Nuevo Contador (Reloj en Tiempo Real) */
+    .clock-container {
+        font-family: 'Dancing Script', cursive;
+        font-size: 2em;
+        color: #e67e22;
+        margin-top: 30px;
+        background: #fdf5e6;
+        padding: 15px 25px;
+        border-radius: 30px;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        border: 1px dashed #e67e22;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+
+    .clock-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .clock-value {
+        font-size: 1.8em;
+        font-weight: bold;
+    }
+
+    .clock-label {
+        font-size: 0.5em;
+        text-transform: uppercase;
+        margin-top: -5px;
+    }
+
+    /* Keyframes para el movimiento */
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-15px); }
+    }
+
+    @keyframes sway {
+        0%, 100% { transform: rotate(-5deg); }
+        50% { transform: rotate(5deg); }
+    }
+
+    /* Corazones amarillos flotando de fondo */
+    .heart {
+        position: absolute;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 24px;
+        animation: rise 5s infinite ease-in;
+    }
+
+    @keyframes rise {
+        0% { bottom: -10%; transform: translateX(0); opacity: 0; }
+        50% { opacity: 1; }
+        100% { bottom: 110%; transform: translateX(-20px); opacity: 0; }
+    }
+</style>
+</head>
+<body>
+
+<div id="intro-screen">
+    <div id="intro-text">Para mi niña hermosa...</div>
+    <button id="intro-button">Toca aquí para abrir ❤</button>
+</div>
+
+<div id="hearts-container"></div>
+
+<div class="container" id="main-container">
+    <div class="bouquet">
+        💛💐🌻
+    </div>
+
+    <div class="letter">
+        <h1>Feliz 21, Mi Amor</h1>
+        <p>
+            Te amo mi amor. Te adoro, espero que sigamos todos los días igual. Eres una gran niña, siempre me alegras el día en todo momento y siempre estarás en mi corazón. Sigue siendo la mejor niña del mundo.
+        </p>
+        <p>
+            Desde el día que te conocí, sabía que no importa por lo que pasemos, siempre solucionaremos todo. Te agarraré la mano y te seguire a donde quieras.
+        </p>
+        <p>
+            Espero esos 4 hijos y cuatro perros, y ojalá que lo único que vea antes de morir de viejito sea tu hermosa sonrisa.
+        </p>
+        
+        <div class="clock-container">
+            <div class="clock-item">
+                <span class="clock-value" id="daysCounter">340</span>
+                <span class="clock-label">Días</span>
+            </div>
+            <div class="clock-item">
+                <span class="clock-value" id="hoursCounter">00</span>
+                <span class="clock-label">Horas</span>
+            </div>
+            <div class="clock-item">
+                <span class="clock-value" id="minutesCounter">00</span>
+                <span class="clock-label">Min</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- Referencias a elementos HTML ---
+    const introScreen = document.getElementById('intro-screen');
+    const mainContainer = document.getElementById('main-container');
+
+    // --- Lógica de la Introducción Interactiva ---
+    // Función para iniciar la animación de "intro"
+    function startIntro() {
+        introScreen.classList.add('hidden'); // Oculta la pantalla de intro con animación CSS
+        setTimeout(() => {
+            mainContainer.style.display = 'block'; // Muestra el contenedor de la carta
+            mainContainer.style.animation = 'fadeInContainer 1.5s ease forwards'; // Inicia animación de fade-in
+            // Inicia el reloj y los corazones flotantes
+            startLiveClock();
+            startHeartsInterval();
+        }, 1000); // Pequeño retraso después de ocultar la intro
+    }
+
+    // Añadir event listener para el toque/clic en la pantalla de intro
+    introScreen.addEventListener('click', startIntro);
+
+
+    // --- Lógica del Nuevo Contador (Reloj en Tiempo Real) ---
+    // Fecha de inicio (puedes ajustarla si lo necesitas). 
+    // Usamos la fecha actual menos 340 días como punto de partida.
+    const baseDays = 340;
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - baseDays);
+
+    function startLiveClock() {
+        // Ejecuta la función por primera vez y luego cada minuto
+        updateClock();
+        setInterval(updateClock, 60000); // 60000 milisegundos = 1 minuto
+    }
+
+    function updateClock() {
+        const now = new Date();
+        const diffMs = now - startDate; // Diferencia en milisegundos
+
+        // Calculamos días, horas y minutos
+        let totalSeconds = Math.floor(diffMs / 1000);
+        const days = Math.floor(totalSeconds / 86400); // 86400 segundos en un día
+        totalSeconds %= 86400; // Segundos restantes para horas/minutos
+
+        const hours = Math.floor(totalSeconds / 3600); // 3600 segundos en una hora
+        totalSeconds %= 3600; // Segundos restantes para minutos
+
+        const minutes = Math.floor(totalSeconds / 60);
+
+        // Actualizamos los elementos HTML, añadiendo ceros a la izquierda si es necesario
+        document.getElementById('daysCounter').textContent = days;
+        document.getElementById('hoursCounter').textContent = String(hours).padStart(2, '0');
+        document.getElementById('minutesCounter').textContent = String(minutes).padStart(2, '0');
+    }
+
+
+    // --- Efecto de Corazones Amarillos Flotantes ---
+    function startHeartsInterval() {
+        // Crear un nuevo corazón cada 400 milisegundos
+        setInterval(createHeart, 400);
+    }
+
+    function createHeart() {
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        heart.innerHTML = '💛';
+        heart.style.left = Math.random() * 100 + 'vw';
+        // Velocidad aleatoria para cada corazón
+        heart.style.animationDuration = Math.random() * 2 + 3 + 's';
+        
+        document.body.appendChild(heart);
+        
+        // Eliminar el corazón de la memoria cuando sale de la pantalla
+        setTimeout(() => {
+            heart.remove();
+        }, 5000);
+    }
+</script>
+</body>
+</html>
