@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feliz 21, Mi Amor</title>
+<style>
+    /* Importamos fuentes elegantes para la carta */
+    @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Lato:wght@300;400&display=swap');
+
+    body {
+        margin: 0;
+        padding: 0;
+        /* Fondo cálido para resaltar el tema de rosas amarillas */
+        background: linear-gradient(135deg, #fceabb 0%, #f8b500 100%); 
+        font-family: 'Lato', sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        overflow: hidden;
+    }
+
+    .container {
+        text-align: center;
+        position: relative;
+        z-index: 10;
+        padding: 20px;
+    }
+
+    /* Animación del Ramo de Rosas */
+    .bouquet {
+        font-size: 80px;
+        margin-bottom: -25px;
+        /* El ramo flota y se balancea (movimiento) */
+        animation: float 3s ease-in-out infinite, sway 4s ease-in-out infinite;
+        display: inline-block;
+        filter: drop-shadow(0px 10px 10px rgba(0,0,0,0.2));
+        position: relative;
+        z-index: 11;
+    }
+
+    /* Estilo de la Carta */
+    .letter {
+        background: #fffafa; /* Color tipo papel pergamino muy claro */
+        width: 100%;
+        max-width: 550px;
+        margin: 0 auto;
+        padding: 50px 40px 40px 40px;
+        border-radius: 15px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        position: relative;
+        border: 2px solid #f9d423;
+    }
+
+    h1 {
+        font-family: 'Dancing Script', cursive;
+        color: #d35400;
+        font-size: 2.5em;
+        margin-bottom: 15px;
+    }
+
+    p {
+        font-size: 1.15em;
+        color: #333;
+        line-height: 1.6;
+        text-align: justify;
+        margin-bottom: 20px;
+    }
+
+    /* Estilo del Contador */
+    .counter-container {
+        font-family: 'Dancing Script', cursive;
+        font-size: 1.8em;
+        color: #e67e22;
+        margin-top: 30px;
+        background: #fdf5e6;
+        padding: 10px 25px;
+        border-radius: 30px;
+        display: inline-block;
+        border: 1px dashed #e67e22;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+
+    /* Keyframes para el movimiento */
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-15px); }
+    }
+
+    @keyframes sway {
+        0%, 100% { transform: rotate(-5deg); }
+        50% { transform: rotate(5deg); }
+    }
+
+    /* Corazones amarillos flotando de fondo */
+    .heart {
+        position: absolute;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 24px;
+        animation: rise 5s infinite ease-in;
+    }
+
+    @keyframes rise {
+        0% { bottom: -10%; transform: translateX(0); opacity: 0; }
+        50% { opacity: 1; }
+        100% { bottom: 110%; transform: translateX(-20px); opacity: 0; }
+    }
+</style>
+</head>
+<body>
+
+<div id="hearts-container"></div>
+
+<div class="container">
+    <div class="bouquet">
+        💛💐🌻
+    </div>
+
+    <div class="letter">
+        <h1>Feliz 21, Mi Amor</h1>
+        <p>
+            Te amo mi amor. Te adoro, espero que sigamos todos los días igual. Eres una gran niña, siempre me alegras el día en todo momento y siempre estarás en mi corazón. Sigue siendo la mejor niña del mundo. 
+        </p>
+        <p>
+            Desde el día que te conocí, sabía que no importa por lo que pasemos, siempre solucionaremos todo. Te agarraré la mano y te seguiré a donde quieras. 
+        </p>
+        <p>
+            Espero esos 4 hijos y cuatro perros, y ojalá que lo único que vea antes de morir de viejito sea tu hermosa sonrisa.
+        </p>
+        
+        <div class="counter-container">
+            Días juntos: <span id="daysCounter">340</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- Lógica del Contador ---
+    let currentDays = 340;
+    const counterElement = document.getElementById('daysCounter');
+
+    // Configuré el contador para que suba un día cada 3 segundos 
+    // de forma visual mientras ella lee la carta.
+    setInterval(() => {
+        currentDays++;
+        counterElement.textContent = currentDays;
+    }, 3000); // 3000 milisegundos = 3 segundos.
+
+    // --- Efecto de Corazones Amarillos Flotantes ---
+    function createHeart() {
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        heart.innerHTML = '💛';
+        heart.style.left = Math.random() * 100 + 'vw';
+        // Velocidad aleatoria para cada corazón
+        heart.style.animationDuration = Math.random() * 2 + 3 + 's';
+        
+        document.body.appendChild(heart);
+        
+        // Eliminar el corazón de la memoria cuando sale de la pantalla
+        setTimeout(() => {
+            heart.remove();
+        }, 5000);
+    }
+
+    // Crear un nuevo corazón cada 400 milisegundos
+    setInterval(createHeart, 400);
+</script>
+</body>
+</html>
